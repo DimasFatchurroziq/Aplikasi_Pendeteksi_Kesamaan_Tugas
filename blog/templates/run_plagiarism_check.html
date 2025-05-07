@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasil Plagiarisme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        thead {
+            background-color: #1E88E5;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #D6EEEE;
+        }
+        .move_page {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .move_page button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .move_page button:hover {
+            background-color: #45a049;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center; /* Memusatkan teks */
+            vertical-align: middle; /* Memusatkan secara vertikal */
+            padding: 10px;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -25px;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="spinner" class="spinner"></div>
+        <h1>Hasil Plagiarisme</h1>
+        <div id="blok"></div>
+        {% comment %} <h3 id="blok"></h3> {% endcomment %}
+        <table border="1">
+            <thead id="fak">
+                
+            </thead>
+            <tbody id="results-table">
+                <!-- Data hasil plagiarisme akan dimuat di sini -->
+            </tbody>
+        </table>
+        <p id="execution-time"></p>
+        <div class="move_page" id="move_page">
+            {% comment %} <a href="{% url 'delete_all' %}">
+                <button type="button">BACK</button>
+            </a>   {% endcomment %}
+        </div>
+    </div>
+
+    <script>
+        function showSpinner() {
+            document.getElementById('spinner').style.display = 'block';
+        }
+
+        function hideSpinner() {
+            document.getElementById('spinner').style.display = 'none';
+        }
+
+        async function fetchData() {
+            showSpinner();
+            try {
+                let response = await fetch('/blog/run/', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                let data = await response.json();
+                console.log('Data received:', data);  // Log data to console for debugging
+
+                // Update tabel hasil plagiarisme
+                let tableBody = document.getElementById('results-table');
+                tableBody.innerHTML = '';
+                data.results.forEach(result => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        {% comment %} <td>${result.tester_file_name}</td> {% endcomment %}
+                        <td>${result.training_file_name}</td>
+                        <td>${result.code_result_percent || 'N/A'}%</td>
+                        <td>${result.text_result_percent || 'N/A'}%</td>
+                        <td>${result.join_result_percent || 'N/A'}%</td>
+                        <td><a href="/blog/preview/${result.id}/" target="_blank">Lihat</a></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                document.getElementById('blok').innerHTML = 
+                    `<h3>Detail Hasil Pengecekan File ${data.tester_name}</h3>`;
+                document.getElementById('fak').innerHTML = `
+                    <tr>
+                        <th rowspan="2">File Pembanding</th>
+                        <th colspan="4">Hasil Pengecekan Plagiarisme</th>
+                    </tr>
+                    <tr style="background-color:#1E88E5;">
+                        <th>Code</th>
+                        <th>Text</th>
+                        <th>Gabungan</th>
+                        <th>Detail</th>
+                    </tr>
+                `;
+                document.getElementById('move_page').innerHTML = `
+                    <a href="{% url 'delete_all' %}">
+                        <button type="button">BACK</button>
+                    </a>
+                `;
+                // Update waktu eksekusi
+                document.getElementById('execution-time').textContent = `Waktu yang dibutuhkan: ${data.execution_time} detik`;
+
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        // Panggil fungsi fetchData saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', fetchData);
+    </script>
+</body>
+</html>

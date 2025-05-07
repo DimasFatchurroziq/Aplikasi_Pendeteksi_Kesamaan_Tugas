@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                font-family: Arial;
+            }
+
+            .container {
+                width: 80%;
+                margin: auto;
+                overflow: hidden;
+            }
+
+            /* Style the tab */
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 50px;
+                transition: 0.3s;
+                font-size: 17px;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+            /* Style the tab content */
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+
+            /* Center text in the table */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center; /* Center text in table cells */
+                background-color: #f2f2f2;
+            }
+
+            td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Detail Hasil Pengecekan Plagiarisme</h2>
+            <p>Klik tombol di dalam menu tab untuk melihat tabel yang berbeda:</p>
+
+            <div class="tab">
+                <button class="tablinks" onclick="openTab(event, 'Tab1')">Code</button>
+                <button class="tablinks" onclick="openTab(event, 'Tab2')">Text</button>
+            </div>
+
+            <div id="Tab1" class="tabcontent">
+                <h3>Code Yang Sama</h3>
+                <table>
+                    <tr>
+                        <th>Code</th>
+                    </tr>
+                    {% for result1 in result5 %}
+                        <tr>
+                            <td>{{ result1|safe }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div id="Tab2" class="tabcontent">
+                <h3>Text Yang Sama</h3>
+                <table>
+                    <tr>
+                        <th>Text</th>
+                    </tr>
+                    {% for result1 in result6 %}
+                        <tr>
+                            <td>{{ result1|safe }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+    </div>
+    
+        <script>
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+        </script>
+
+    </body>
+</html>

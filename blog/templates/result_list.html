@@ -1,0 +1,18 @@
+<table>
+    <tr>
+        <th>Tester File</th>
+        <th>Training File</th>
+        <th>Code Result %</th>
+        <th>Text Result %</th>
+        <th>Join Result %</th>
+    </tr>
+    {% for result in results %}
+    <tr>
+        <td>{{ result.tester_file_name }}</td>
+        <td>{{ result.training_file_name }}</td>
+        <td>{{ result.code_result_percent }}</td>
+        <td>{{ result.text_result_percent }}</td>
+        <td>{{ result.join_result_percent }}</td>
+    </tr>
+    {% endfor %}
+</table>

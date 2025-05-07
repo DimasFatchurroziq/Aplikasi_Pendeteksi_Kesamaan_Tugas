@@ -1,0 +1,181 @@
+<!-- blog/templates/upload_pdf.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Multiple PDFs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+        form input, form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .file-item a {
+            text-decoration: none;
+            color: #007bff;
+            margin: 0 0 0 10px;
+        }
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;  /* Adjust the padding to make the button smaller */
+            cursor: pointer;
+            font-size: 14px;  /* Adjust the font size if needed */
+        }
+        .delete-form {
+            border: none;
+            padding: 0;
+            margin: 0 10px 0 10px;
+        }
+        {% comment %} .head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0px;
+            padding: 0px;
+        } {% endcomment %}
+        .action {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .move_page {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 15px 20px 15px;
+        }
+        .move_page button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .move_page a {
+            text-decoration: none;
+        }
+        .move_page button:hover {
+            background-color: #45a049;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% comment %} <h2>Upload Data Tester</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>
+        <h2>Uploaded PDF</h2>
+        <div class="file-list">
+            {% for document in documentstes %}
+            <div class="file-item">
+                <div>
+                    <strong>{{ document.title }}</strong>
+                    <br>
+                    <small>{{ document.uploaded_at }}</small>
+                </div>
+                <div class="action">
+                    <a href="{% url 'download_pdf_tester' document.id %}">Download</a>
+                    <a href="{% url 'view_pdf_tester' document.id %}" target="_blank">View</a>
+                    <form action="{% url 'delete_pdf_tester' document.id %}" method="post" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div> {% endcomment %}
+
+        <h2>Upload Data Training</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Upload</button>
+        </form>   
+        <h2>Uploaded PDFs</h2>
+        <div class="file-list">
+            {% for document in documents %}
+            <div class="file-item">
+                <div>
+                    <strong>{{ document.title }}</strong>
+                    <br>
+                    <small>{{ document.uploaded_at }}</small>
+                </div>
+                <div class="action">
+                    <a href="{% url 'download_pdf_training' document.id %}">Download</a>
+                    <a href="{% url 'view_pdf_training' document.id %}" target="_blank">View</a>
+                    <form action="{% url 'delete_pdf_training' document.id %}" method="post" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="move_page">
+            <a href="{% url 'upload_pdf' %}">
+                <button type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                    </svg>
+                    BACK
+                </button>
+            </a>   
+            <a href="{% url 'run_plagiarism_check' %}">
+                <button type="button">START
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
+                </button>
+            </a>    
+        </div>
+    </div>
+</body>
+
+</html>
