@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+from dotenv import load_dotenv
 
 from pathlib import Path
 
@@ -78,17 +79,18 @@ WSGI_APPLICATION = 'aplikasi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_project1',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',   # Atau alamat server MySQL Anda
-        'PORT': '3306', 
+        'NAME': os.getenv('DB_NAME', 'django_project1'),
+        'USER': os.getenv('DB_USER', 'root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'sql_mode': 'traditional',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
 }
+
 
 
 # Password validation
